@@ -6,12 +6,13 @@ class Controller1:
 
     controller_type = 'RAID1'
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, qnt:int, size:int) -> None:
+        self.set_disks(qnt, size)
 
     # Задаём нужно кол-во дисков
     def set_disks(self, qnt: int, size: int) -> None:
         self.disks_number = qnt
+        self.disks_size = size
         self.disks = []
         for i in range(qnt):
             self.disks.append(Disk(str(i), size))
@@ -19,12 +20,13 @@ class Controller1:
     # Записываем данные в каждый диск
     def write_data(self, size: int, data: bytearray = 'No data') -> int:
         for disk in self.disks:
-            if disk.storage - size < 0:
-                return 0
-            else:
-                disk.storage = disk.storage - size
-                disk.write(data)
+            #disk.storage = disk.storage - size
+            disk.write(size, data)
         return 1
+
+    # Вернуть сколько свободное место
+    def get_storage(self) -> float:
+        return self.disks[0].get_storage()
 
     # Вывести содержимое дисков
     def print_data(self) -> None:

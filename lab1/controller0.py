@@ -19,6 +19,9 @@ class Controller0:
     def write_data(self, size: int) -> int:
         # разбиваем данные между дисками
         part = size / self.disks_number
+        ###
+        # НУЖНА ПРОВЕРКА ЕСТЬ ЛИ МЕСТО
+        ###
         for disk in self.disks:
             if disk.storage - part < 0:
                 return 0

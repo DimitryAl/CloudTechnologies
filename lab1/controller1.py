@@ -9,6 +9,14 @@ class Controller1:
     def __init__(self, qnt:int, size:int) -> None:
         self.set_disks(qnt, size)
 
+    
+    # Вывести состояние контроллера
+    def get_state(self):
+        print(self.controller_type)
+        print(self.disks_number)
+        print(self.disks_size)
+
+        
     # Задаём нужно кол-во дисков
     def set_disks(self, qnt: int, size: int) -> None:
         self.disks_number = qnt

@@ -5,11 +5,13 @@ from controller1 import Controller1
 class Controller10:
 
     controller_type = 'RAID10'
-
+    
     def __init__(self, qnt = 6, size = 80) -> None:
         print('Creating RAID10')
         self.add_disks(qnt, size)
 
+
+    # Вывести состояние контроллера
     def get_state(self):
         print(self.controller_type)
         print(self.disks_number)

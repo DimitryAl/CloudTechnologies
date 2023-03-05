@@ -1,42 +1,44 @@
+""""""
+import logging
 from disk import Disk
 
 
-# Контроллер RAID1
+logging.basicConfig(filename='lab1.txt', filemode='a',
+                    format="%(asctime)s - %(levelname)s : %(message)s", level=logging.DEBUG)
+
+
 class Controller1:
+    """RAID1 Controller"""
 
     controller_type = 'RAID1'
 
-    def __init__(self, qnt:int, size:int) -> None:
-        self.set_disks(qnt, size)
+    def __init__(self, qnt: int, size: int) -> None:
+        self.__set_disks(qnt, size)
 
-    
-    # Вывести состояние контроллера
     def get_state(self):
-        print(self.controller_type)
-        print(self.disks_number)
-        print(self.disks_size)
+        """Вывести состояние контроллера"""
+        logging.info("Controller state: Controller type - %s, Number of disks - %i, Free space - %f",
+                     self.controller_type, self.disks_number, self.get_free_storage())
 
-        
-    # Задаём нужно кол-во дисков
-    def set_disks(self, qnt: int, size: int) -> None:
+    def __set_disks(self, qnt: int, size: int) -> None:
+        """Задаём нужно кол-во дисков"""
         self.disks_number = qnt
         self.disks_size = size
         self.disks = []
         for i in range(qnt):
             self.disks.append(Disk(str(i), size))
 
-    # Записываем данные в каждый диск
     def write_data(self, size: int, data: bytearray = 'No data') -> int:
+        """Запись данных на диск"""
         for disk in self.disks:
-            #disk.storage = disk.storage - size
             disk.write(size, data)
         return 1
 
-    # Вернуть сколько свободное место
-    def get_storage(self) -> float:
-        return self.disks[0].get_storage()
+    def get_free_storage(self) -> float:
+        """Возврощает сколько свободного места"""
+        return self.disks[0].get_free_storage()
 
-    # Вывести содержимое дисков
     def print_data(self) -> None:
+        """Вывод содержимого массива"""
         for disk in self.disks:
             print(disk.read())

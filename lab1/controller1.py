@@ -1,9 +1,10 @@
 """"""
+
 import logging
 from disk import Disk
 
 
-logging.basicConfig(filename='lab1.txt', filemode='a',
+logging.basicConfig(filename='lab1.txt', filemode='w',
                     format="%(asctime)s - %(levelname)s : %(message)s", level=logging.DEBUG)
 
 
@@ -11,6 +12,7 @@ class Controller1:
     """RAID1 Controller"""
 
     controller_type = 'RAID1'
+    disks = []
 
     def __init__(self, qnt: int, size: int) -> None:
         self.__set_disks(qnt, size)
@@ -28,14 +30,14 @@ class Controller1:
         for i in range(qnt):
             self.disks.append(Disk(str(i), size))
 
-    def write_data(self, size: int, data: bytearray = 'No data') -> int:
+    def write_data(self, size: int) -> int:
         """Запись данных на диск"""
         for disk in self.disks:
-            disk.write(size, data)
+            disk.write(size)
         return 1
 
     def get_free_storage(self) -> float:
-        """Возврощает сколько свободного места"""
+        """Возвращает сколько свободного места"""
         return self.disks[0].get_free_storage()
 
     def print_data(self) -> None:

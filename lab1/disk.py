@@ -17,10 +17,9 @@ class Disk:
         """Изменение количества свободного места"""
         self.free_storage -= size
 
-    def write(self, size: int, data: bytearray = bytearray('No data', encoding='utf-8')) -> None:
+    def write(self, size: int) -> None:
         """Запись данных на диск"""
         self.__fill_storage(size)
-        self.data.append(data)
 
     def read(self) -> bytearray:
         """Чтение с диска"""

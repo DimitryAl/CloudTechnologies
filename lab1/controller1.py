@@ -1,4 +1,4 @@
-""""""
+"""Контроллер RAID1ы"""
 
 import logging
 from disk import Disk

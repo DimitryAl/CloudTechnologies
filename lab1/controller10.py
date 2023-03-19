@@ -1,4 +1,4 @@
-"""Когтроллер RAID10"""
+"""Контроллер RAID10"""
 
 
 import math
@@ -29,18 +29,6 @@ class Controller10:
         """Деструктор"""
         logging.info("RAID10 destroyed")
 
-    def get_state(self) -> None:
-        """Вывести состояние контроллера"""
-        logging.info("Controller state: Controller type - %s, Number of disks - %i, Free space - %f",
-                     self.controller_type, self.disks_number, self.disks[0].get_free_storage())
-
-    def get_data_blocks(self) -> None:
-        """ Вывести блоки данных в каждом диске"""
-        logging.info("Data blocks:")
-        for data in self.disks_data:
-            logging.info("%s%i, %i", data[1], data[0], data[2])
-
-
     def __add_disks(self, qnt=6, size=80) -> None:
         """Добавить диски"""
         self.disks_number = qnt
@@ -48,6 +36,23 @@ class Controller10:
         self.disks = []
         for __ in range(qnt):
             self.disks.append(Controller1(8, size))
+
+    def get_state(self) -> str:
+        """Вывести состояние контроллера"""
+        logging.info("Controller state: Controller type - %s, Number of disks - %i, Free space - %f",
+                     self.controller_type, self.disks_number, self.disks[0].get_free_storage())
+        res = "Controller state: Controller type - {}, Number of disks - {}, Free space - {}".format(
+                     self.controller_type, self.disks_number, self.disks[0].get_free_storage())
+        return res
+
+    def get_data_blocks(self) -> None:
+        """ Вывести блоки данных в каждом диске"""
+        res = ''
+        logging.info("Data blocks:")
+        for data in self.disks_data:
+            logging.info("%s%i, %iGB", data[1], data[0], data[2])
+            res += "{}{}, {}GB\n".format(data[1], data[0], data[2])
+        return res 
 
     def write_data(self, letter, size: int) -> None:
         """Запись данных на диск"""
@@ -60,7 +65,7 @@ class Controller10:
         # Проверяем есть ли на дисках место
         if self.disks[0].get_free_storage() < part:
             logging.error("Not enough free space in RAID!")
-            return 0
+            return "Not enough free space in RAID!"
 
         # Пишем данные на диск
         for i in range(len(self.disks)):
@@ -82,8 +87,11 @@ class Controller10:
             if flag:
                 break
         
-    
-    def get_redundancy(self) -> None:
+    def get_redundancy(self) -> str:
         logging.info("Redundancy = %f", 
                     (2 * self.disks_number * self.disks_size - self.total_data_size)
                     / (2 * self.disks_number * self.disks_size))
+        res = "Redundancy = {}".format( 
+                    (2 * self.disks_number * self.disks_size - self.total_data_size)
+                    / (2 * self.disks_number * self.disks_size))
+        return res 

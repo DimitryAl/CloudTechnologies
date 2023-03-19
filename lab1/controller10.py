@@ -36,8 +36,9 @@ class Controller10:
 
     def get_data_blocks(self) -> None:
         """ Вывести блоки данных в каждом диске"""
+        logging.info("Data blocks:")
         for data in self.disks_data:
-            logging.info("%s%i, %i", data[1], data[0], data[2]) 
+            logging.info("%s%i, %i", data[1], data[0], data[2])
 
 
     def __add_disks(self, qnt=6, size=80) -> None:
@@ -48,13 +49,14 @@ class Controller10:
         for __ in range(qnt):
             self.disks.append(Controller1(8, size))
 
-    def write_data(self, letter, size: int) -> int:
+    def write_data(self, letter, size: int) -> None:
         """Запись данных на диск"""
 
         logging.info("Trying to write %i GB", size)
         # Вычисляем размер данных, которые необходимо записать на каждый диск
         part = size / self.disks_number
-        part = math.trunc(part) + 1
+        if not part.is_integer():
+            part = math.trunc(part) + 1
         # Проверяем есть ли на дисках место
         if self.disks[0].get_free_storage() < part:
             logging.error("Not enough free space in RAID!")
@@ -67,4 +69,16 @@ class Controller10:
             #disk.write_data(part)
             self.disks_data.append((i, letter, part))
 
-        return 1
+    def delete_data(self, letter: str) -> None:
+        """Удалить данные из RAID"""
+        logging.info("Deleting data block %s", letter)
+        flag = True
+        while True:
+            flag = True
+            for data in self.disks_data:
+                if data[1] == letter:
+                    self.disks_data.remove(data)
+                    flag = False
+            if flag:
+                break
+

@@ -13,10 +13,10 @@ logging.basicConfig(filename='lab1.txt', filemode='w',
 class Controller10:
     """RAID10 Controller"""
 
-    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     controller_type = 'RAID10'
     disks_number = 0
     disks_size = 0
+    total_data_size = 0
     disks = []
     disks_data = []
 
@@ -63,11 +63,10 @@ class Controller10:
             return 0
 
         # Пишем данные на диск
-        #for disk in self.disks:
         for i in range(len(self.disks)):
             self.disks[i].write_data(part)
-            #disk.write_data(part)
             self.disks_data.append((i, letter, part))
+        self.total_data_size += part*self.disks_number
 
     def delete_data(self, letter: str) -> None:
         """Удалить данные из RAID"""
@@ -78,7 +77,13 @@ class Controller10:
             for data in self.disks_data:
                 if data[1] == letter:
                     self.disks_data.remove(data)
+                    self.total_data_size -= data[2]
                     flag = False
             if flag:
                 break
-
+        
+    
+    def get_redundancy(self) -> None:
+        logging.info("Redundancy = %f", 
+                    (2 * self.disks_number * self.disks_size - self.total_data_size)
+                    / (2 * self.disks_number * self.disks_size))

@@ -19,5 +19,7 @@ con0.write_data('B', 20)
 con0.get_state()
 
 con0.get_data_blocks()
+con0.get_redundancy()
 con0.delete_data("A")
 con0.get_data_blocks()
+con0.get_redundancy()
